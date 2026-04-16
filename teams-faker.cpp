@@ -229,6 +229,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
+    // Enforce Single Instance
+    HANDLE hMutex = CreateMutexW(NULL, TRUE, L"TeamsFaker_UniqueInstance_Mutex");
+    if (GetLastError() == ERROR_ALREADY_EXISTS) {
+        // Application is already running. Find it and bring it to the foreground.
+        HWND hExistingWnd = FindWindowW(L"TeamsFakerClass", L"Teams Faker");
+        if (hExistingWnd) {
+            ShowWindow(hExistingWnd, SW_RESTORE);
+            SetForegroundWindow(hExistingWnd);
+        }
+        // Exit this new instance immediately
+        return 0;
+    }
+
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_TEAMSFAKER, szWindowClass, MAX_LOADSTRING);
     
