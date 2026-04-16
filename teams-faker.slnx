@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="teams-faker.vcxproj" />
+  <Project Path="teams-faker.vcxproj" Id="3bdc4b95-bc51-4871-b471-e97f1074a050" />
 </Solution>

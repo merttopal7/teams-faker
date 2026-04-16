@@ -190,12 +190,12 @@ void ExecuteTeamsSequence(HWND hWndMainApp)
         return; 
     }
 
-    // 1. Send Ctrl + 1
-    wcscpy_s(szSequenceStatus, 100, L"Sent Ctrl + 1");
+    // 1. Send Ctrl + 3
+    wcscpy_s(szSequenceStatus, 100, L"Sent Ctrl + 3");
     InvalidateRect(hWndMainApp, NULL, TRUE);
     
     HWND targetHwnd = GetDeepTarget(mainHwnd);
-    SendKeyAction(mainHwnd, targetHwnd, 0x31); // '1' is 0x31
+    SendKeyAction(mainHwnd, targetHwnd, 0x33); // '3' is 0x33
 
     // 2. Wait 2 seconds
     wcscpy_s(szSequenceStatus, 100, L"Waiting 2 seconds...");
@@ -416,25 +416,41 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hWnd, message, wParam, lParam);
 
     case WM_TRAYICON:
-        if (lParam == WM_LBUTTONDBLCLK || lParam == WM_LBUTTONUP) {
-            ShowWindow(hWnd, SW_RESTORE);
-            SetForegroundWindow(hWnd);
-        }
-        else if (lParam == WM_RBUTTONUP) {
+        // Show options menu on BOTH left click and right click
+        if (lParam == WM_LBUTTONUP || lParam == WM_RBUTTONUP) {
             POINT pt;
             GetCursorPos(&pt);
             HMENU hMenu = CreatePopupMenu();
             
-            AppendMenuW(hMenu, MF_STRING, 1, bIsRunning ? L"Stop" : L"Start");
-            AppendMenuW(hMenu, MF_SEPARATOR, 2, NULL);
-            AppendMenuW(hMenu, MF_STRING, 3, L"Exit Application");
+            // 1. Top Option: Open GUI
+            AppendMenuW(hMenu, MF_STRING, 4, L"Open Teams Faker");
+            AppendMenuW(hMenu, MF_SEPARATOR, 5, NULL);
             
+            // 2. Middle Option: Start/Stop toggle
+            AppendMenuW(hMenu, MF_STRING, 1, bIsRunning ? L"Stop Action" : L"Start Action");
+            AppendMenuW(hMenu, MF_SEPARATOR, 2, NULL);
+            
+            // 3. Bottom Option: Exit
+            AppendMenuW(hMenu, MF_STRING, 3, L"Exit Application");
+
+            // Make 'Open Teams Faker' bold (default)
+            SetMenuDefaultItem(hMenu, 4, FALSE);
+            
+            // Foreground window prevents menu hanging when clicked outside
             SetForegroundWindow(hWnd);
             int cmd = TrackPopupMenu(hMenu, TPM_RETURNCMD | TPM_NONOTIFY, pt.x, pt.y, 0, hWnd, nullptr);
-            if (cmd == 1) {
+            
+            if (cmd == 4) {
+                // Open Teams Faker
+                ShowWindow(hWnd, SW_RESTORE);
+                SetForegroundWindow(hWnd);
+            }
+            else if (cmd == 1) {
+                // Start / Stop
                 SendMessage(hWnd, WM_COMMAND, bIsRunning ? IDC_BTN_STOP : IDC_BTN_START, 0);
             }
             else if (cmd == 3) {
+                // Exit
                 DestroyWindow(hWnd); 
             }
             DestroyMenu(hMenu);

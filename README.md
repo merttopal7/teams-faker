@@ -11,7 +11,7 @@ Teams Faker is a modern background utility built in C++ that keeps Microsoft Tea
 - **Background Execution:** Fully operates in the background, allowing you to use other applications completely uninterrupted.
 - **Deep Target Injection:** Modern Chromium WebViews (which Teams uses) usually ignore background key inputs. Teams Faker uses powerful Win32 API hacks (Spoofing `WM_ACTIVATE` and temporarily mapping internal `AttachThreadInput` keyboard states) to trick the render engine into natively registering `.Ctrl.` shortcuts while minimized.
 - **Smart Target Tracking:** Employs loose window classification and process tracing to ensure the correct Teams interface is detected even when minimized or pushed to the System Tray.
-- **Interactive UI & Task Sequence:** A clean native Win32 GUI provides options for variable delays (up to 100 seconds) and tracks real-time progress. When activated, it seamlessly executes: `Send Ctrl + 1` ⭢ `Wait 2 Seconds` ⭢ `Send Ctrl + 2`.
+- **Interactive UI & Task Sequence:** A clean native Win32 GUI provides options for variable delays (up to 100 seconds) and tracks real-time progress. When activated, it seamlessly executes: `Send Ctrl + 3` ⭢ `Wait 2 Seconds` ⭢ `Send Ctrl + 2`.
 - **System Tray:** Hide the tool out of the way in your system tray and control actions (Start/Stop) right from the context menu without bringing up the GUI.
 
 ## Technical Details
