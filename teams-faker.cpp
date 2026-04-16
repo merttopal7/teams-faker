@@ -405,6 +405,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 // Launch the thread to do actions
                 std::thread([hWnd]() { ExecuteTeamsSequence(hWnd); }).detach();
             }
+
+            // Anti-Idle: Move mouse if no system-wide input for 60 seconds
+            LASTINPUTINFO lii = { sizeof(LASTINPUTINFO) };
+            if (GetLastInputInfo(&lii)) {
+                DWORD dwIdleTimeMs = GetTickCount() - lii.dwTime;
+                if (dwIdleTimeMs >= 60000) { 
+                    // Perform subtle mouse jiggle (1 pixel and back)
+                    INPUT inputs[2] = {};
+                    inputs[0].type = INPUT_MOUSE;
+                    inputs[0].mi.dwFlags = MOUSEEVENTF_MOVE;
+                    inputs[0].mi.dx = 1;
+                    inputs[0].mi.dy = 1;
+
+                    inputs[1].type = INPUT_MOUSE;
+                    inputs[1].mi.dwFlags = MOUSEEVENTF_MOVE;
+                    inputs[1].mi.dx = -1;
+                    inputs[1].mi.dy = -1;
+
+                    SendInput(2, inputs, sizeof(INPUT));
+                }
+            }
         }
         break;
         
