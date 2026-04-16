@@ -1,5 +1,9 @@
 # Teams Faker
 
+<img align="left" width="64" height="64" src="small.ico" alt="Teams Faker Icon">
+
+
+
 Teams Faker is a modern background utility built in C++ that keeps Microsoft Teams active and triggers specific keyboard shortcuts (like opening Activity via `Ctrl+1` and `Ctrl+2`) periodically, **without ever stealing your system focus** or disrupting your workflow.
 
 ## Features
